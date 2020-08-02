@@ -1,0 +1,21 @@
+<div>
+  <h1>[Vue] 如何在路由跳转时保持原组件的声明周期</h1>
+  <p>
+    <span>
+      一、在Router中添加元信息
+    </span>
+  </p>
+  <pre>new Router(
+  routers: [ ... ],
+  meta: {
+    keepAlive: true // true: 保持组件的生命周期 false(默认): 不保持
+})</pre>
+  <p>
+    <span>
+      二、用<code>&lt;keep-alive&gt;</code>包裹
+    </span>
+  </p>
+  <pre>&lt;keep-alive&gt;
+  &lt;router-view/&gt;
+&lt;keep-alive&gt;</pre>
+</div>
