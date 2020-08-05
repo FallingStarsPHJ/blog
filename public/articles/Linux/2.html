@@ -1,0 +1,315 @@
+<h1 style="text-align: center">文件和目录</h1>
+<h2>获取文件状态</h2>
+<ul>
+    <li>stat()、fstat()、lstat()、fstatat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;sys/stat.h&gt;
+#include &lt;sys/types.h&gt;
+#include &lt;unistd.h&gt;
+int stat(const char* pathname, struct stat* statbuf);
+int fstat(int fd, struct stat* statbuf);
+int lstat(const char* pathname, struct stat* statbuf);
+
+#include &lt;fcntl.h&gt;
+#include &lt;sys/stat.h&gt;
+int fstatat(int dirfd, const char* pathname, struct stat* statbuf, int flags);
+</code></pre>
+<h2>按实际用户ID和实际组ID查看对文件的访问权限</h2>
+<ul>
+    <li>access()、faccessat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功（授予所有请求权限，mode为F_OK和文件存在），返回0
+   若失败（最后一次mode请求失败，mode为F_OK和文件不存在，或者发生了其他的错误），返回-1 */
+
+#include &lt;unistd.h&gt;
+int access(const char* pathname, int mode);
+
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+int faccessat(int dirfd, const char* pathname, int mode, int flags);
+</code></pre>
+<h2>为进程设置文件模式创建屏蔽字</h2>
+<ul>
+    <li>umask()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 返回设置之前的模式位 */
+
+#include &lt;sys/types.h&gt;
+#include &lt;sys/stat.h&gt;
+mode_t umask(mode_t mask);
+</code></pre>
+<h2>改变现有文件的访问权限</h2>
+<ul>
+    <li>chmod()、fchmod()、fchmodat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;sys/stat.h&gt;
+int chmod(const char* pathname, mode_t mode);
+int fchmod(int fd, mode_t mode);
+
+#include &lt;fcnth.h&gt;
+#include &lt;sys/stat.h&gt;
+int fchmodat(int dirfd, const char* pathname, mode_t mode, int flags);
+</code></pre>
+<h2>更改文件的用户ID和组ID</h2>
+<ul>
+    <li>chown()、fchown()、lchown()、fchownat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;unistd.h&gt;
+int chown(const char* pathname, uid_t owner, gid_t group);
+int fchown(int fd, uid_t owner, gid_t group);
+int lchown(const char* pathname, uid_t owner, gid_t group);
+
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+int fchownat(int dirfd, const char* pathname, uid_t owner, gid_t group, int flags);
+</code></pre>
+<h2>截断文件长度</h2>
+<ul>
+    <li>truncate()、ftruncate()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;unistd.h&gt;
+#include &lt;sys/types.h&gt;
+int truncate(const char* path, off_t lenght);
+int ftruncate(int fd, off_t length);
+</code></pre>
+<h2>文件链接</h2>
+<h3>创建指向现有文件的链接</h3>
+<ul>
+    <li>link()、linkat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;unistd.h&gt;
+int link(const char* oldpath, const char* newpath);
+
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+int linkat(int olddirfd, const char* oldpath, int newdirfd, const char* newpath, int flags);
+</code></pre>
+<h3>删除指向现有文件的链接</h3>
+<ul>
+    <li>unlink()、unlinkat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;unistd.h&gt;
+int unlink(const char* pathname);
+
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+int unlinkat(int dirfd, const char* pathname, int flags);
+</code></pre>
+<h3>解除对文件或目录的链接</h3>
+<ul>
+    <li>remove()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;stdio.h&gt;
+int remove(const char* pathname);
+</code></pre>
+<h2>对文件或目录重命名</h2>
+<ul>
+    <li>rename()、renameat()、renameat2()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;stdio.h&gt;
+int rename(const char* oldpath, const char* newpath);
+
+#include &lt;fcntl.h&gt;
+#include &lt;stdio.h&gt;
+int renameat(int olddirfd, const char* oldpath, int newdirfd, const char* newpath);
+int renameat2(int olddirfd, const char* oldpath, int newdirfd, const char* newpath, unsigned int flags);
+</code></pre>
+<h2>符号链接</h2>
+<h3>创建符号链接</h3>
+<ul>
+    <li>symlink()、symlinkat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;unistd.h&gt;
+int symlink(const char* target, const char* linkpath);
+
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+int symlinkat(const char* target, int newdirfd, cosnt char* linkpath);
+</code></pre>
+<h3>读取符号链接</h3>
+<ul>
+    <li>readlink()、readlinkat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回buf的字节数，若字节数等于bufsize，则可能会发生截断
+   若失败，返回-1 */
+
+#include &lt;unistd.h&gt;
+ssize_t readlink(const char* pathname, char* buf, size_t bufsize);
+
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+ssize_t readlinkat(int dirfd, const char* pathname, char* buf, size_t bufsize);
+</code></pre>
+<h2>文件的时间</h2>
+<h3>更改文件的访问时间和修改时间</h3>
+<ul>
+    <li>futimens()、utimensat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;fcntl.h&gt;
+#include &lt;sys/stat.h&gt;
+int futimens(int fd, const struct timespec times[2]);
+int utimensat(int dirfd, const char* pathname, const struct timespec time[2], int flags);
+</code></pre>
+<h2>目录</h2>
+<h3>创建目录</h3>
+<ul>
+    <li>mkdir()、mkdirat()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;sys/stat.h&gt;
+#include &lt;sys/types.h&gt;
+int mkdir(const char* pathname, mode_t mode);
+
+#include &lt;fcntl.h&gt;
+#include &lt;sys/stat.h&gt;
+int mkdirat(int dirfd, const char* pathname, mode_t);
+</code></pre>
+<h3>删除目录</h3>
+<ul>
+    <li>rmdir()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;unistd.h&gt;
+int rmdir(const char* pathname);
+</code></pre>
+<h3>打开目录</h3>
+<ul>
+    <li>opendir()、fdopendir()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回指向目录流的指针
+   若失败，返回NULL */
+
+#include &lt;sys/types.h&gt;
+#include &lt;dirent.h&gt;
+DIR* opendir(const char* name);
+DIR* fdopendir(int fd);
+</code></pre>
+<h3>关闭目录</h3>
+<ul>
+    <li>closedir()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;sys/types.h&gt;
+#include &lt;dirent.h&gt;
+int closedir(DIR* drip);
+</code></pre>
+<h3>读取目录</h3>
+<ul>
+    <li>readdir()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回指向表示目录项结构的指针，若目录流达到结尾，返回NULL，errno不变
+   若失败，返回NULL，并设置errno
+   注：为了区分目录流达到结尾和执行失败，在调用readdir()前将errno设置为0 */
+
+#include &lt;dirent.h&gt;
+struct dirent* readdir(DIR* dirp);
+</code></pre>
+<h3>重置该目录流的位置为开头</h3>
+<ul>
+    <li>rewinddir()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>#include &lt;sys/types.h&gt;
+#include &lt;dirent.h&gt;
+void rewinddir(DIR* dirp);
+</code></pre>
+<h3>获取目录流的当前位置</h3>
+<ul>
+    <li>telldir()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回当前目录流的位置
+   若失败，返回-1 */
+
+#include &lt;dirent.h&gt;
+long telldir(DIR* dirp);
+</code></pre>
+<h3>设置下一次调用readdir()返回的目录流的位置</h3>
+<ul>
+    <li>seekdir()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>#include &lt;dirent.h&gt;
+void seekdir(DIR* dirp, long loc);
+</code></pre>
+<h2>当前工作目录</h2>
+<h3>更改当前工作目录</h3>
+<ul>
+    <li>chdir()、fchdir()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回0
+   若失败，返回-1 */
+
+#include &lt;unistd.h&gt;
+int chdir(const char* path);
+int fchdir(int fd);
+</code></pre>
+<h3>获取当前工作目录的完整路径名</h3>
+<ul>
+    <li>getcwd()、getwd()、get_current_dir_name()</li>
+
+</ul>
+<pre><code class='language-c' lang='c'>/* 若成功，返回当前工作目录的完整路径名
+   若失败，返回NULL */
+
+#include &lt;unistd.h&gt;
+char* getcwd(char* buf, size_t size);
+char* getwd(char* buf);
+char* get_current_dir_name(void);
+</code></pre>
+<p>&nbsp;</p>

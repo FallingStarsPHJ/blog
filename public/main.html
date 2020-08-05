@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>Main</title>
+    <style>
+        :root {
+            font-size: 50px;
+            font-family: Helvetica;
+        }
+        #app {
+            width: 5rem;
+            height: 1rem;
+            background-color: #000;
+            border-radius: .2rem;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            padding: .3rem 0;
+            position: relative;
+            box-shadow: 0px 3px 12px rgba(0, 0, 0, .2);
+        }
+
+        #app::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, .9) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, 0) 70%, rgba(0, 0, 0, .9) 100%);
+            width: 100%;
+            height: 100%;
+            border-radius: .2rem;
+        }
+
+        span {
+            color: #fff;
+            display: block;
+            flex: 1 1 5rem;
+            font-size: 1rem;
+            line-height: 1rem;
+            text-align: center;
+
+            transform: translateY(-1rem);
+        }
+
+        span.before {
+            transform: translateY(0rem);
+            transition: transform .2s ease-in;
+        }
+
+        span.after {
+            transform: translateY(-2rem);
+            transition: transform .2s ease-in;
+        }
+
+        span::before {
+            display: block;
+            content: attr(data-before);
+        }
+
+        span::after {
+            display: block;
+            content: attr(data-after);
+        }
+
+        button {
+            flex: 0 0 1.2rem;
+            border: 0;
+            background: none;
+            color: #fff;
+            font-size: .6rem;
+            line-height: 1rem;
+            padding: 0;
+            margin: 0;
+            width: 1rem;
+            height: 1rem;
+            position: relative;
+            z-index: 100;
+            outline: none;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        .searcher {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-content: center;
+        }
+        input[type="text"] {
+            margin: 0 1.5rem 0 0;
+            padding: 0.5rem 1rem;
+            border: 3px solid #333;
+            border-radius: 0.5rem;
+            font-size: 3rem;
+            font-family: inherit;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div id="app">
+        <button @click="subtract" :disabled="isAnimating">
+            <i class="fas fa-minus"></i>
+        </button>
+        <span :class="{before: isBefore, after: isAfter}" :data-before="countBefore" :data-after="countAfter">{{ count }}</span>
+        <button @click="add" :disabled="isAnimating">
+            <i class="fas fa-plus"></i>
+        </button>
+    </div>
+<!--    <form class="searcher" action="http://www.baidu.com/baidu" target="_blank">-->
+<!--        <input name=tn type=hidden value=baidu>-->
+<!--        <input type=text name=word>-->
+<!--        <input id="go" type="submit" value="百度搜索" style="display: none">-->
+<!--        <label for="go">-->
+<!--            <svg t="1596524959178" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="721" width="64" height="64"><path d="M517.36064 15.81056c-277.02272 0-501.54496 224.53248-501.54496 501.55008C15.81056 794.32192 240.3328 1018.88 517.36064 1018.88 794.32704 1018.88 1018.88 794.32192 1018.88 517.36064 1018.88 240.34304 794.07616 15.81056 517.36064 15.81056zM675.55328 555.56096l-199.66464 199.71072c-21.15584 21.18144-55.28576 21.18144-76.43136 0-21.16096-21.19168-21.16096-55.22944 0-76.41088l161.49504-161.50016L399.45728 355.85536c-21.16096-21.17632-21.16096-55.27552 0-76.43648 21.1456-21.1456 55.27552-21.1456 76.43136 0l199.66464 199.7056C696.74496 500.2752 696.74496 534.62528 675.55328 555.56096z" p-id="722" data-spm-anchor-id="a313x.7781069.0.i1" fill="#333333" class="selected"></path></svg>-->
+<!--        </label>-->
+<!--    </form>-->
+</div>
+</body>
+<script src="https://cdn.staticfile.org/vue/2.6.11/vue.min.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            count: 10,
+            countBefore: 9,
+            countAfter: 11,
+            isBefore: false,
+            isAfter: false,
+        },
+        computed: {
+            isAnimating() {
+                return this.isBefore || this.isAfter
+            }
+        },
+        methods: {
+            subtract() {
+                this.isBefore = true
+
+                setTimeout(() => {
+                    this.count--
+                    this.countBefore = this.count - 1
+                    this.countAfter = this.count + 1
+                    this.isBefore = false
+                }, 200)
+            },
+            add() {
+                this.isAfter = true
+
+                setTimeout(() => {
+                    this.count++
+                    this.countBefore = this.count - 1
+                    this.countAfter = this.count + 1
+                    this.isAfter = false
+                }, 200)
+            }
+        }
+    })
+</script>
+</html>
